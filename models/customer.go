@@ -1,53 +1,59 @@
 package models
 
-import (
-	"fmt"
-)
-
+// Customer : Architecture in database
 type Customer struct {
-	ID                     int    `json:"customerNumber"`
-	Name                   string `json:"customerName"`
-	ContactLastName        string `json:"contactLastName"`
-	ContactFirstName       string `json:"contactFirstName"`
-	Phone                  string `json:"phone"`
-	AddressLine1           string `json:"addressLine1"`
-	AddressLine2           string `json:"addressLine2"`
-	City                   string `json:"city"`
-	State                  string `json:"state"`
-	PostalCode             string `json:"postalCode"`
-	Country                string `json:"country"`
+	CustomerNumber   int        `json:"customerNumber"`
+	Name             string     `json:"customerName"`
+	ContactLastName  string     `json:"contactLastName"`
+	ContactFirstName string     `json:"contactFirstName"`
+	Phone            string     `json:"phone"`
+	AddressLine1     string     `json:"addressLine1"`
+	AddressLine2     NullString `json:"addressLine2"`
+	City             string     `json:"city"`
+	State            NullString `json:"state"`
+	PostalCode       string     `json:"postalCode"`
+	Country          string     `json:"country"`
+	Order
 }
 
-func GetCustomer(customer_id int) (Customer, error) {
+// GetCustomer : Get customer infos and associated orders id
+func GetCustomer(customerID int) (Customer, error) {
 	var customer Customer
 
-	// Execute the query
-	search := "SELECT customers.customerNumber, customers.customerName, customers.contactLastName," +
-			  "customers.contactFirstName, customers.phone, customers.addressLine1," +
-			  "customers.addressLine2, customers.city, customers.state," +
-			  "customers.postalCode, customers.country "
-	from := "FROM customers "
-	where := "WHERE customers.customerNumber = ?"
+	query := `
+		SELECT 	
+			customers.customerNumber,
+			customers.customerName,
+			customers.contactLastName,
+			customers.contactFirstName,
+			customers.phone,
+			customers.addressLine1,
+			customers.addressLine2,
+			customers.city,
+			customers.state,
+			customers.postalCode,
+			customers.country,
+			orders.orderNumber
+		FROM customers
+		JOIN orders ON customers.customerNumber = orders.customerNumber
+		WHERE customers.customerNumber = ?
+	`
 
-	err := DB.QueryRow(search + from + where, customer_id).Scan(&customer.ID,
-																&customer.Name,
-																&customer.ContactLastName,
-																&customer.ContactFirstName,
-																&customer.Phone,
-																&customer.AddressLine1,
-																&customer.AddressLine2,
-																&customer.City,
-																&customer.State,
-																&customer.PostalCode,
-																&customer.Country)
-	if err != nil {
-		fmt.Println(err.Error())
-		return customer, err
-	}
+	err := DB.QueryRow(query, customerID).Scan(
+		&customer.CustomerNumber,
+		&customer.Name,
+		&customer.ContactLastName,
+		&customer.ContactFirstName,
+		&customer.Phone,
+		&customer.AddressLine1,
+		&customer.AddressLine2,
+		&customer.City,
+		&customer.State,
+		&customer.PostalCode,
+		&customer.Country,
+		&customer.Order.OrderNumber)
 
-	customerOrders, err := GetLengthOrders(customer_id)
 	if err != nil {
-		fmt.Println(customerOrders)
 		return customer, err
 	}
 

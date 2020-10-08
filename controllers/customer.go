@@ -1,17 +1,16 @@
 package controllers
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 
-	"github.com/wyllisMonteiro/DB_MONTEIRO_PO1/models"
 	"github.com/wyllisMonteiro/DB_MONTEIRO_PO1/services"
 )
 
 func GetCustomer(w http.ResponseWriter, req *http.Request) {
-	customers, err := models.GetCustomer(119)
+	customers, err := services.GetCustomer(103)
 	if err != nil {
-		fmt.Println("erreur db")
+		log.Println(err)
 		return
 	}
 
