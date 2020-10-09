@@ -13,12 +13,13 @@ type Customer struct {
 	State            NullString `json:"state"`
 	PostalCode       string     `json:"postalCode"`
 	Country          string     `json:"country"`
-	Order
 }
 
 // GetCustomer : Get customer infos and associated orders id
-func GetCustomer(customerID int) (Customer, error) {
+func GetCustomer(customerID int) (Customer, []int, error) {
 	var customer Customer
+	var order Order
+	var ordersID []int
 
 	query := `
 		SELECT 	
@@ -39,23 +40,33 @@ func GetCustomer(customerID int) (Customer, error) {
 		WHERE customers.customerNumber = ?
 	`
 
-	err := DB.QueryRow(query, customerID).Scan(
-		&customer.CustomerNumber,
-		&customer.Name,
-		&customer.ContactLastName,
-		&customer.ContactFirstName,
-		&customer.Phone,
-		&customer.AddressLine1,
-		&customer.AddressLine2,
-		&customer.City,
-		&customer.State,
-		&customer.PostalCode,
-		&customer.Country,
-		&customer.Order.OrderNumber)
+	customersResult, err := DB.Query(query, customerID)
 
 	if err != nil {
-		return customer, err
+		return customer, ordersID, err
 	}
 
-	return customer, nil
+	for customersResult.Next() {
+		err := customersResult.Scan(
+			&customer.CustomerNumber,
+			&customer.Name,
+			&customer.ContactLastName,
+			&customer.ContactFirstName,
+			&customer.Phone,
+			&customer.AddressLine1,
+			&customer.AddressLine2,
+			&customer.City,
+			&customer.State,
+			&customer.PostalCode,
+			&customer.Country,
+			&order.OrderNumber)
+
+		if err != nil {
+			return customer, ordersID, err
+		}
+
+		ordersID = append(ordersID, order.OrderNumber)
+	}
+
+	return customer, ordersID, nil
 }

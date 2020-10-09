@@ -25,7 +25,7 @@ func GetTotalAndPriceProduct(orderID int) (TotalAndPriceProduct, error) {
 		GROUP BY orderdetails.orderNumber
 	`
 
-	err := DB.QueryRow(query, 10123).Scan(
+	err := DB.QueryRow(query, orderID).Scan(
 		&totalAndPriceProduct.OrderID,
 		&totalAndPriceProduct.NbProductOrdered,
 		&totalAndPriceProduct.TotalPrice)

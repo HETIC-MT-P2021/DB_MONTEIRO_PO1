@@ -1,12 +1,9 @@
 package structs
 
-import (
-	"github.com/wyllisMonteiro/DB_MONTEIRO_PO1/models"
-)
+import "github.com/wyllisMonteiro/DB_MONTEIRO_PO1/models"
 
 // Customer : Architecture rendered to view
-type Customer struct {
+type CustomerView struct {
 	models.Customer
-	NbProductOrdered int     `json:"nbProductOrdered"`
-	TotalPrice       float32 `json:"totalPrice"`
+	Orders []models.TotalAndPriceProduct `json:"orders"`
 }
