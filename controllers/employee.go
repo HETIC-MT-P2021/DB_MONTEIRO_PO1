@@ -12,6 +12,7 @@ func GetEmployees(w http.ResponseWriter, req *http.Request) {
 	customer, err := services.GetEmployees()
 	if err != nil {
 		log.Println(err)
+		services.WriteErrorJSON(w, http.StatusInternalServerError, "Impossible de récupérer les employés")
 		return
 	}
 

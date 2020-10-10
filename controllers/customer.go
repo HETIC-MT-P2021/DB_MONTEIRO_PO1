@@ -17,12 +17,14 @@ func GetCustomer(w http.ResponseWriter, req *http.Request) {
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		log.Println(err)
+		services.WriteErrorJSON(w, http.StatusInternalServerError, "Impossible de récupérer la fiche client")
 		return
 	}
 
 	customer, err := services.GetCustomer(id)
 	if err != nil {
 		log.Println(err)
+		services.WriteErrorJSON(w, http.StatusInternalServerError, "Impossible de récupérer la fiche client")
 		return
 	}
 

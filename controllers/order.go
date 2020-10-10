@@ -17,12 +17,14 @@ func GetOrder(w http.ResponseWriter, req *http.Request) {
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
 		log.Println(err)
+		services.WriteErrorJSON(w, http.StatusInternalServerError, "Impossible de récupérer la commande")
 		return
 	}
 
 	order, err := services.GetOrder(id)
 	if err != nil {
 		log.Println(err)
+		services.WriteErrorJSON(w, http.StatusInternalServerError, "Impossible de récupérer la commande")
 		return
 	}
 
