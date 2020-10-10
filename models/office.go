@@ -12,6 +12,12 @@ type Office struct {
 	PostalCode   string     `json:"postalCode"`
 }
 
+// OfficeWithEmployees : Office with employees infos
+type OfficeWithEmployees struct {
+	Office
+	Employees []Employee `json:"employees"`
+}
+
 // GetOffices : Get infos offices
 func GetOffices() ([]Office, error) {
 	var offices []Office

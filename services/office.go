@@ -8,14 +8,29 @@ import (
 // GetOffices : Get offices infos with associated employees
 func GetOffices() (structs.OfficeView, error) {
 	var officesRender structs.OfficeView
+	var officesWithEmployees []models.OfficeWithEmployees
 
 	offices, err := models.GetOffices()
 	if err != nil {
 		return officesRender, err
 	}
 
+	for _, office := range offices {
+		employees, err := models.GetEmployeesOffice(office.OfficeCode)
+		if err != nil {
+			return officesRender, err
+		}
+
+		officeWithEmployees := models.OfficeWithEmployees{
+			office,
+			employees,
+		}
+
+		officesWithEmployees = append(officesWithEmployees, officeWithEmployees)
+	}
+
 	officesRender = structs.OfficeView{
-		offices,
+		officesWithEmployees,
 	}
 
 	return officesRender, nil

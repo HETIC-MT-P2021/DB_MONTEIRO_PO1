@@ -73,3 +73,47 @@ func GetEmployeesWithOffice() ([]EmployeeWithOffice, error) {
 
 	return employeesWithOffice, nil
 }
+
+// GetEmployeesOffice : Get all employess which are associated to an office
+func GetEmployeesOffice(officeCode string) ([]Employee, error) {
+	var employee Employee
+	var employees []Employee
+
+	query := `
+		SELECT
+			employees.employeeNumber,
+			employees.lastName,
+			employees.firstName,
+			employees.extension,
+			employees.email,
+			employees.jobTitle
+		FROM employees
+		JOIN offices ON employees.officeCode = offices.officeCode
+		WHERE offices.officeCode = ?
+	`
+
+	employeesResult, err := DB.Query(query, officeCode)
+
+	if err != nil {
+		return employees, err
+	}
+
+	for employeesResult.Next() {
+		err := employeesResult.Scan(
+			&employee.EmployeeNumber,
+			&employee.LastName,
+			&employee.FirstName,
+			&employee.Extension,
+			&employee.Email,
+			&employee.JobTitle)
+
+		if err != nil {
+			return employees, err
+		}
+
+		employees = append(employees, employee)
+	}
+
+	return employees, nil
+
+}

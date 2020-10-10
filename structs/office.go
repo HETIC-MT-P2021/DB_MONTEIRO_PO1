@@ -6,5 +6,5 @@ import (
 
 // OfficeView : Architecture rendered to view
 type OfficeView struct {
-	Offices []models.Office `json:"offices"`
+	Offices []models.OfficeWithEmployees `json:"offices"`
 }
