@@ -9,7 +9,7 @@ import (
 func GetEmployees() (structs.EmployeesView, error) {
 	var employeesRender structs.EmployeesView
 
-	employees, err := models.GetEmployees()
+	employees, err := models.GetEmployeesWithOffice()
 	if err != nil {
 		return employeesRender, err
 	}

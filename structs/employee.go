@@ -6,5 +6,5 @@ import (
 
 // EmployeesView : Architecture rendered to view
 type EmployeesView struct {
-	Employees []models.Employee `json:"employees"`
+	Employees []models.EmployeeWithOffice `json:"employees"`
 }
