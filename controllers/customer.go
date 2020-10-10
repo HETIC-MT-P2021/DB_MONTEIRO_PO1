@@ -7,10 +7,10 @@ import (
 )
 
 func GetCustomer(w http.ResponseWriter, req *http.Request) {
-	customers, err := services.GetCustomer(103)
+	customer, err := services.GetCustomer(103)
 	if err != nil {
 		return
 	}
 
-	services.WriteJSON(w, http.StatusOK, customers)
+	services.WriteJSON(w, http.StatusOK, customer)
 }

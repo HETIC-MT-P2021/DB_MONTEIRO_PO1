@@ -40,14 +40,14 @@ func GetCustomer(customerID int) (Customer, []int, error) {
 		WHERE customers.customerNumber = ?
 	`
 
-	customersResult, err := DB.Query(query, customerID)
+	customerResults, err := DB.Query(query, customerID)
 
 	if err != nil {
 		return customer, ordersID, err
 	}
 
-	for customersResult.Next() {
-		err := customersResult.Scan(
+	for customerResults.Next() {
+		err := customerResults.Scan(
 			&customer.CustomerNumber,
 			&customer.Name,
 			&customer.ContactLastName,
