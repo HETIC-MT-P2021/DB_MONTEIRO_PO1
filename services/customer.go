@@ -1,8 +1,6 @@
 package services
 
 import (
-	"fmt"
-
 	"github.com/wyllisMonteiro/DB_MONTEIRO_PO1/models"
 	"github.com/wyllisMonteiro/DB_MONTEIRO_PO1/structs"
 )
@@ -10,7 +8,7 @@ import (
 // GetCustomer : Get customer infos with number of ordered products and total price of ordered products
 func GetCustomer(customerID int) (structs.CustomerView, error) {
 	var customerRender structs.CustomerView
-	var totalAndPriceProductSlice []models.TotalAndPriceProduct
+	var totalAndPriceProducts []models.TotalAndPriceProduct
 
 	customer, ordersID, err := models.GetCustomer(customerID)
 	if err != nil {
@@ -18,18 +16,17 @@ func GetCustomer(customerID int) (structs.CustomerView, error) {
 	}
 
 	for _, orderID := range ordersID {
-		fmt.Println(orderID)
 		totalAndPriceProduct, err := models.GetTotalAndPriceProduct(orderID)
 		if err != nil {
 			return structs.CustomerView{}, err
 		}
 
-		totalAndPriceProductSlice = append(totalAndPriceProductSlice, totalAndPriceProduct)
+		totalAndPriceProducts = append(totalAndPriceProducts, totalAndPriceProduct)
 	}
 
 	customerRender = structs.CustomerView{
 		customer,
-		totalAndPriceProductSlice,
+		totalAndPriceProducts,
 	}
 
 	return customerRender, nil

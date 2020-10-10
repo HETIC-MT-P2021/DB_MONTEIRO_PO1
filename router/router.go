@@ -8,6 +8,7 @@ import (
 
 // Load controller (handler)
 func InitRoutes(r *mux.Router) *mux.Router {
-	r.HandleFunc("/customers", controllers.GetCustomer).Methods("GET")
+	r.HandleFunc("/customer", controllers.GetCustomer).Methods("GET")
+	r.HandleFunc("/order", controllers.GetOrder).Methods("GET")
 	return r
 }

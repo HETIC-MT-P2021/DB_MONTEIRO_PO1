@@ -10,6 +10,42 @@ type Order struct {
 	Comments     string `json:"comments"`
 }
 
+// GetProductsCode : Get orderID and products code associated
+func GetProductsCode(orderID int) (int, []string, error) {
+	var order Order
+	var orderDetails OrderDetails
+	var orderProducts []string
+
+	query := `
+		SELECT
+			orderdetails.orderNumber,
+			orderdetails.productCode
+		FROM orderdetails
+		JOIN orders ON orderdetails.orderNumber = orders.orderNumber
+		WHERE orders.orderNumber = ?
+	`
+
+	orderResults, err := DB.Query(query, orderID)
+
+	if err != nil {
+		return orderID, orderProducts, err
+	}
+
+	for orderResults.Next() {
+		err := orderResults.Scan(
+			&order.OrderNumber,
+			&orderDetails.ProductCode)
+
+		if err != nil {
+			return orderID, orderProducts, err
+		}
+
+		orderProducts = append(orderProducts, orderDetails.ProductCode)
+	}
+
+	return orderID, orderProducts, nil
+}
+
 // GetTotalAndPriceProduct : Get total and price of all products ordered
 func GetTotalAndPriceProduct(orderID int) (TotalAndPriceProduct, error) {
 	var totalAndPriceProduct TotalAndPriceProduct
