@@ -10,5 +10,6 @@ import (
 func InitRoutes(r *mux.Router) *mux.Router {
 	r.HandleFunc("/customer", controllers.GetCustomer).Methods("GET")
 	r.HandleFunc("/order", controllers.GetOrder).Methods("GET")
+	r.HandleFunc("/employees", controllers.GetEmployees).Methods("GET")
 	return r
 }
