@@ -8,15 +8,25 @@ import (
 // GetOrder : Get order infos with products details
 func GetOrder(orderID int) (structs.OrderView, error) {
 	var orderRender structs.OrderView
+	var products []models.Product
 
-	orderID, orderProducts, err := models.GetProductsCode(10123)
+	orderID, orderProductsCode, err := models.GetProductsCode(10123)
 	if err != nil {
 		return orderRender, err
 	}
 
+	for _, productCode := range orderProductsCode {
+		product, err := models.GetProduct(productCode)
+		if err != nil {
+			return orderRender, err
+		}
+
+		products = append(products, product)
+	}
+
 	orderRender = structs.OrderView{
 		orderID,
-		orderProducts,
+		products,
 	}
 
 	return orderRender, err

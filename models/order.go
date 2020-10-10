@@ -10,11 +10,7 @@ type Order struct {
 	Comments     string `json:"comments"`
 }
 
-type OrderProduct struct {
-	OrderNumber   int      `json:"orderNumber"`
-	OrderProducts []string `json:"orderProducts"`
-}
-
+// GetProductsCode : Get orderID and products code associated
 func GetProductsCode(orderID int) (int, []string, error) {
 	var order Order
 	var orderDetails OrderDetails

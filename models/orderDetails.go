@@ -1,5 +1,6 @@
 package models
 
+// OrderDetails : Architecture in database
 type OrderDetails struct {
 	OrderNumber     int     `json:"orderNumber"`
 	ProductCode     string  `json:"productCode"`
