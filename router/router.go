@@ -8,9 +8,10 @@ import (
 
 // InitRoutes : Load controller (handler)
 func InitRoutes(r *mux.Router) *mux.Router {
-	r.HandleFunc("/customers/{id}", controllers.GetCustomer).Methods("GET")
-	r.HandleFunc("/orders/{id}", controllers.GetOrder).Methods("GET")
-	r.HandleFunc("/employees", controllers.GetEmployees).Methods("GET")
-	r.HandleFunc("/offices", controllers.GetOffices).Methods("GET")
+	var api = r.PathPrefix("/api/v1").Subrouter()
+	api.HandleFunc("/customers/{id}", controllers.GetCustomer).Methods("GET")
+	api.HandleFunc("/orders/{id}", controllers.GetOrder).Methods("GET")
+	api.HandleFunc("/employees", controllers.GetEmployees).Methods("GET")
+	api.HandleFunc("/offices", controllers.GetOffices).Methods("GET")
 	return r
 }
